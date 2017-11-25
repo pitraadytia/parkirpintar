@@ -33,6 +33,11 @@ const images = [
 
 const list = [
     {
+        name: 'Ambil Gambar',
+        icon: 'photo-camera',
+        page: 'TakePhoto'
+    },
+    {
         name: 'Scan Plat Nomor',
         icon: 'photo-camera',
         page: 'Scan'

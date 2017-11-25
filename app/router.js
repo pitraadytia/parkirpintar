@@ -11,6 +11,7 @@ import Profile from "./screens/Profile";
 import RiwayatTransaksi from "./screens/RiwayatTransaksi"
 import TopUpMember from "./screens/TopUpMember"
 import RegisterMember from "./screens/RegisterMember"
+import TakePhoto from "./screens/TakePhoto"
 
 const headerStyle = {
   marginTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
@@ -48,6 +49,13 @@ export const SignedIn = StackNavigator(
       navigationOptions: {
         title: "Profile",
         headerStyle
+      }
+    },
+    TakePhoto: {
+      screen: TakePhoto,
+      navigationOptions: {
+          title: "Scan Plat Nomor",
+          headerStyle
       }
     },
     Scan: {
