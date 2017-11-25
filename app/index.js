@@ -13,14 +13,19 @@ export default class App extends React.Component {
     };
   }
 
+
   componentWillMount() {
     isSignedIn()
       .then(res => this.setState({ signedIn: res, checkedSignIn: true , username: 'pitra'}))
       .catch(err => alert("An error occurred"));
   }
 
+
+
   render() {
     const { checkedSignIn, signedIn, username } = this.state;
+
+
 
 
     // If we haven't checked AsyncStorage yet, don't render anything (better ways to do this)
