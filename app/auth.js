@@ -66,7 +66,7 @@ export const onScan = async function(id_plat) {
 
 export const onTopUp = async function(id_member, topup) {
     let api_token = await AsyncStorage.getItem(USER_KEY);
-    fetch('http://parkirpintar.wicida.ac.id/api/topup/store', {
+    fetch('http://parkirpintar.wicida.ac.id/api/employee/topup/store', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -84,12 +84,18 @@ export const onTopUp = async function(id_member, topup) {
 
 };
 
-export const onRegister = async function(name, email, hp) {
+export const onRegister = async function(name, email, hp, pwd, merk, plat, type, otp) {
     console.log(name);
     console.log(email);
     console.log(hp);
+    console.log(pwd);
+    console.log(merk);
+    console.log(plat);
+    console.log(type);
+    console.log(otp);
     let api_token = await AsyncStorage.getItem(USER_KEY);
-    fetch('http://parkirpintar.wicida.ac.id/api/user/store', {
+
+    fetch('http://parkirpintar.wicida.ac.id/api/employee/user/store', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -99,11 +105,32 @@ export const onRegister = async function(name, email, hp) {
         body: JSON.stringify({
             name: name,
             email : email,
-            phone: hp
+            phone: hp,
+            password: pwd,
+            merk: merk,
+            plat: plat,
+            type: type,
+            otp: otp
         })
     }).then((response) => response.json())
         .then((responseData) => {
             alert(responseData.message);
+        }).done();
+};
+
+export const requestOTP = async function(hp) {
+    console.log(hp);
+    let api_token = await AsyncStorage.getItem(USER_KEY);
+    fetch('http://parkirpintar.wicida.ac.id/api/employee/user/otp/' + hp, {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + api_token
+        }
+    }).then((response) => response.json())
+        .then((responseData) => {
+            console.log(responseData)
         }).done();
 
 };

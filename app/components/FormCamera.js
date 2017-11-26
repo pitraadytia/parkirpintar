@@ -1,13 +1,16 @@
 import React from 'react';
 import { Image, View } from 'react-native';
 import { ImagePicker } from 'expo';
-import { Button } from 'react-native-elements';
+import { Button, List, FormInput, FormLabel } from 'react-native-elements';
+
+import { onScan } from "../auth";
 
 
 
 export class FormCamera extends React.Component {
     state = {
         image: null,
+        text : null
     };
 
     render() {
@@ -25,17 +28,35 @@ export class FormCamera extends React.Component {
                 <Button
                     buttonStyle={{ marginTop: 20 }}
                     backgroundColor="#03A9F4"
-                    title="Daftarkan"
+                    title="Baca Text"
                     onPress={() => {this.storePicture(this.state.image)} }
                 />
+
+                <FormLabel>Plat Nomor Kendaraan</FormLabel>
+                <FormInput ref={input => this.input = input} placeholder="Masukkan Plat Nomor..."  onChangeText={(text) => handleOnScan(text) } value={this.state.text} />
+
+                <Button
+                    buttonStyle={{ marginTop: 20 }}
+                    backgroundColor="#03A9F4"
+                    title="Proses"
+                    onPress={() => {
+                        onScan(this.state.text);
+                        this.setState({text: ''});
+                        this.input.clearText();
+                    }}
+                />
+
             </View>
         );
     }
 
+
+    handleOnScan = (text) => this.setState({text: text});
+
     _pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
-            aspect: [4, 3],
+            aspect: [80,20]
         });
 
         console.log(result);
@@ -51,7 +72,9 @@ export class FormCamera extends React.Component {
         if (PicturePath) {
             // Create the form data object
             let data = new FormData();
-            data.append('picture', {uri: PicturePath, name: 'selfie.jpg', type: 'image/jpg'});
+            data.append('picture', {uri: PicturePath, name: 'plat.jpg', type: 'image/jpg'});
+
+
 
             // Create the config object for the POST
             // You typically have an OAuth2 token that you use for authentication
@@ -64,15 +87,12 @@ export class FormCamera extends React.Component {
                 body: data,
             }
 
-            fetch("https://postman-echo.com/post", config)
+            fetch("http://ocrparkirpintar.wicida.ac.id/upload", config)
+                .then((response) => response.json())
                 .then((responseData) => {
-                    // Log the response form the server
-                    // Here we get what we sent to Postman back
-                    console.log(responseData);
-                })
-                .catch(err => {
-                    console.log(err);
-                })
+                     console.log(responseData);
+                     this.setState({text: responseData.text.replace(/\s+/g, "")});
+                }).done();
         }
     }
 }
